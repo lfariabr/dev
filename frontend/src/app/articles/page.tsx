@@ -6,36 +6,7 @@ import { Article } from "@/lib/graphql/types/article.types";
 import { AlertCircle, Calendar, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-import { format, formatDistanceToNow, parseISO, isValid } from "date-fns";
-
-// Format date safely with fallback
-const formatDateSafe = (dateString: string, formatType: 'distance' | 'full' = 'full') => {
-  try {
-    // First try to parse the ISO string
-    const date = parseISO(dateString);
-    
-    // Check if the result is a valid date
-    if (isValid(date)) {
-      return formatType === 'distance' 
-        ? `${formatDistanceToNow(date)} ago` 
-        : format(date, 'MMMM d, yyyy');
-    }
-    
-    // If it's not a valid ISO date, try direct Date constructor
-    const fallbackDate = new Date(dateString);
-    if (isValid(fallbackDate)) {
-      return formatType === 'distance' 
-        ? `${formatDistanceToNow(fallbackDate)} ago` 
-        : format(fallbackDate, 'MMMM d, yyyy');
-    }
-    
-    // If all parsing fails, return a fallback
-    return formatType === 'distance' ? 'recently' : 'Recently published';
-  } catch (error) {
-    console.error('Date formatting error:', error);
-    return formatType === 'distance' ? 'recently' : 'Recently published';
-  }
-};
+import { formatDateSafe } from "@/utils/dateHandler";
 
 export default function ArticlesPage() {
   const { articles, loading, error } = usePublishedArticles();
@@ -117,7 +88,7 @@ function ArticleCard({ article }: { article: Article }) {
           
           <div className="flex items-center text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 mr-1" />
-            <span>{formatDateSafe(article.createdAt)}</span>
+            <span>Published {formatDateSafe(article.createdAt)}</span>
           </div>
           
           <p className="text-muted-foreground">{contentPreview}</p>

@@ -6,7 +6,7 @@ import { Project } from "@/lib/graphql/types/project.types";
 import { AlertCircle, Loader2, Calendar } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-import { formatDistanceToNow, parseISO, isValid } from "date-fns";
+import { formatDateSafe } from "@/utils/dateHandler";
 
 export default function ProjectsPage() {
   const { projects, loading, error } = useProjects();
@@ -61,18 +61,6 @@ export default function ProjectsPage() {
   );
 }
 
-// Format date safely with fallback
-const formatDateSafe = (dateString: string) => {
-  try {
-    const date = parseISO(dateString);
-    if (isValid(date)) return `${formatDistanceToNow(date)} ago`;
-    const fallback = new Date(dateString);
-    return isValid(fallback) ? `${formatDistanceToNow(fallback)} ago` : "recently";
-  } catch {
-    return "recently";
-  }
-};
-
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link href={`/projects/${project.id}`} className="relative block group">
@@ -98,10 +86,28 @@ export function ProjectCard({ project }: { project: Project }) {
               : project.description}
           </p>
 
-          <div className="flex items-center text-sm text-muted-foreground mb-4">
+          {/* Display tags if available */}
+          <div className="mt-4">
+          {/* Tags */}
+          {project.technologies?.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-3">
+              {project.technologies.map((tech, index) => (
+                <span 
+                  key={index}
+                  className="bg-black text-gray-300 font-mono px-3 py-1.5 rounded-md text-xs border border-gray-800 shadow-[0_0_3px_#848884]"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Date */}
+          <div className="flex items-center text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 mr-1" />
-            <span>Updated {formatDateSafe(project.updatedAt)}</span>
+            <span>Published {formatDateSafe(project.createdAt)}</span>
           </div>
+        </div>
 
           <div className="flex gap-3 mb-2">
             {project.githubUrl && (

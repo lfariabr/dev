@@ -8,6 +8,7 @@ export const PROJECT_FRAGMENT = gql`
     description
     imageUrl
     githubUrl
+    technologies
     createdAt
     updatedAt
   }
