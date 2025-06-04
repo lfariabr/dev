@@ -1,0 +1,2 @@
+- add support to images on posts and comments (similar to how it's done on dev.to)
+- fix "tags" at projects that are not being properly saved
