@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { sendDiscordWebhook } from '@/utils/discord';
 
 export default function RegisterPage() {
   const [name, setName] = useState('');
@@ -41,6 +42,10 @@ export default function RegisterPage() {
       email,
       password,
     );
+  };
+
+  const handleButtonClick = async () => {
+    await sendDiscordWebhook('Register button was clicked');
   };
 
   return (
@@ -115,6 +120,7 @@ export default function RegisterPage() {
               type="submit" 
               className="w-full" 
               disabled={loading}
+              onClick={handleButtonClick}
             >
               {loading ? (
                 <>

@@ -19,6 +19,7 @@ import {
   Alert,
   AlertDescription
 } from '@/components/ui/alert';
+import { sendDiscordWebhook } from '@/utils/discord';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -37,6 +38,10 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await login(email, password);
+  };
+
+  const handleButtonClick = async () => {
+    await sendDiscordWebhook('Login button was clicked');
   };
 
   return (
@@ -104,6 +109,7 @@ export default function LoginPage() {
               type="submit"
               className="w-full"
               disabled={loading}
+              onClick={handleButtonClick}
             >
               {loading ? (
                 <>

@@ -8,6 +8,7 @@ import { SendIcon, BotIcon, UserIcon, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { gql, useMutation } from '@apollo/client';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { sendDiscordWebhook } from '@/utils/discord';
 
 // GraphQL mutation for sending a message to the chatbot
 const ASK_QUESTION_MUTATION = gql`
@@ -123,6 +124,10 @@ export default function ChatbotPage() {
       setIsLoading(false);
     }
   });
+
+  const handleButtonClick = async () => {
+    await sendDiscordWebhook('Chatbot button was clicked');
+  };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,7 +289,7 @@ export default function ChatbotPage() {
               disabled={isLoading}
               className="flex-1"
             />
-            <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+            <Button type="submit" size="icon" disabled={isLoading || !input.trim()} onClick={handleButtonClick}>
               <SendIcon className="h-4 w-4" />
             </Button>
           </form>
