@@ -5,6 +5,7 @@ import { ApolloProvider } from "@/lib/apollo/ApolloProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
         >
           <ApolloProvider>
             <AuthProvider>
+              <GoogleAnalytics />
               {children}
               <Toaster />
             </AuthProvider>
