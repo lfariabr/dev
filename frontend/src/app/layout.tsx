@@ -6,12 +6,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/lib/auth/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import { defaultMetadata } from "./metadata";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Luis Faria - Portfolio",
-  description: "Personal portfolio and projects showcase",
+  ...defaultMetadata,
 };
 
 export default function RootLayout({
