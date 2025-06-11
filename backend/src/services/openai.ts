@@ -1,10 +1,38 @@
 import OpenAI from 'openai';
 import config from '../config/config';
+import luisProfile from '../data/luis-profile.json';
 
 // Creating openAi client
 const openai = new OpenAI({
     apiKey: config.openaiApiKey,
-  });
+});
+
+// Cache the stringified profile to avoid repeated JSON.stringify
+let cachedProfile: string | null = null;
+
+const getSystemPrompt = (): string => {
+  // Return cached version if available
+  if (cachedProfile) {
+    return `You are acting on behalf of Luis Faria.
+    Refer to the following professional background:
+    
+    ${cachedProfile}
+    
+    Only answer questions based on this information in a markdown format so it is easy to read. Avoid BIG blocks of text.
+    If the user asks for code or advice, respond as Luis would based on his experience.`;
+  }
+
+  // Generate and cache the profile context
+  cachedProfile = JSON.stringify(luisProfile, null, 2);
+  
+  return `You are acting on behalf of Luis Faria.
+  Refer to the following professional background:
+  
+  ${cachedProfile}
+  
+  Only answer questions based on this information in a markdown format so it is easy to read. Avoid BIG blocks of text.
+  If the user asks for code or advice, respond as Luis would based on his experience.`;
+};
 
 /**
  * Chat with AI using OpenAI's GPT models
@@ -22,7 +50,7 @@ export const chatWithAI = async (
         messages: [
           {
             role: 'system',
-            content: 'You are a helpful assistant for a portfolio website. Provide concise, helpful responses about web development, projects, and technologies. Avoid giving any personal opinions or making claims about specific individuals. Do not generate code unless explicitly asked.',
+            content: getSystemPrompt(),
           },
           {
             role: 'user',
@@ -41,4 +69,3 @@ export const chatWithAI = async (
   };
   
   export default openai;
-    

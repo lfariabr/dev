@@ -8,6 +8,7 @@ import { SendIcon, BotIcon, UserIcon, AlertTriangle } from 'lucide-react';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { gql, useMutation } from '@apollo/client';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { MarkdownMessage } from '@/components/chat/MarkdownMessage';
 import { sendDiscordWebhook } from '@/utils/discord';
 
 // GraphQL mutation for sending a message to the chatbot
@@ -248,14 +249,19 @@ export default function ChatbotPage() {
                     message.sender === 'user'
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted'
-                  } p-3 rounded-lg`}
+                  } p-4 rounded-lg`}
                 >
                   {message.sender === 'bot' && (
-                    <BotIcon className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                    <div className="flex-shrink-0">
+                      <BotIcon className="h-5 w-5 mt-0.5" />
+                    </div>
                   )}
-                  <div>
-                    <p className="text-sm">{message.content}</p>
-                    <p className="text-xs opacity-70 mt-1">
+                  <div className="overflow-x-auto w-full">
+                    <MarkdownMessage 
+                      content={message.content} 
+                      className={message.sender === 'user' ? 'text-primary-foreground' : ''}
+                    />
+                    <p className="text-xs opacity-70 mt-2">
                       {message.timestamp.toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -263,7 +269,9 @@ export default function ChatbotPage() {
                     </p>
                   </div>
                   {message.sender === 'user' && (
-                    <UserIcon className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                    <div className="flex-shrink-0">
+                      <UserIcon className="h-5 w-5 mt-0.5" />
+                    </div>
                   )}
                 </div>
               </div>

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { formatDistanceToNow, parseISO, isValid } from "date-fns";
 import { notFound } from "next/navigation";
+import { MarkdownMessage } from '@/components/chat/MarkdownMessage';
 
 interface ProjectDetailPageProps {
   params: Promise<{ id: string }>;
@@ -96,18 +97,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
             <div className="space-y-4">
               <h2 className="text-2xl font-semibold">About this project</h2>
               <div className="prose prose-stone dark:prose-invert space-y-1">
-                {project.description
-                  .split(/—{2,}|[\n\r]+|🚀|🔧|📈|🧠|🛠|📝|📊|📎|⚡|🎯|💡|🧵|🎬|🍾|😮|😵|😵‍💫|😭|😵‍🔥|🪄|🫠|🔥|📌|🏁|🏗|🔗|📎|✍️|📂|📁|📃/)
-                  .map(section => section.trim())
-                  .filter(Boolean)
-                  .map((section, idx) => {
-                    const isHeading = /^Version \d|^The |^Final Thoughts|^Business Impact|^MVP Tools|^Results Today|^Major Upgrades/i.test(section);
-                    return isHeading ? (
-                      <h3 key={idx} className="text-xl font-semibold mt-4">{section}</h3>
-                    ) : (
-                      <p key={idx}>{section}</p>
-                    );
-                  })}
+                <MarkdownMessage content={project.description} />
               </div>
             </div>
             
