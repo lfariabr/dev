@@ -36,7 +36,10 @@ export function MarkdownMessage({
 
   // Custom component to handle paragraphs and their children
   const Paragraph = ({ node, children, ...props }: any) => {
-    // Check if any direct child is a block-level element
+    // Check if this paragraph contains only an image
+    const hasOnlyImage = node?.children?.length === 1 && node?.children?.[0]?.tagName === 'img';
+    
+    // Check if any direct child is a block-level element or an image
     const hasBlockChild = Children.toArray(children).some(child => {
       if (!isValidElement(child)) return false;
       
@@ -46,13 +49,21 @@ export function MarkdownMessage({
         'blockquote', 'pre', 'hr', 'figure', 'figcaption', 'video', 'iframe', 'form', 'fieldset', 'address'
       ];
       
-      return blockElements.includes(child.type as string) || 
-             (child.props?.node?.tagName && blockElements.includes(child.props.node.tagName));
+      // Check if it's a block element
+      const isBlockElement = blockElements.includes(child.type as string) || 
+                            (child.props?.node?.tagName && blockElements.includes(child.props.node.tagName));
+      
+      // Check if it's an image (which we render as figure)
+      const isImage = child.type === 'img' || 
+                     (child.props?.node?.tagName === 'img') ||
+                     (typeof child.type === 'function' && child.props?.node?.tagName === 'img');
+      
+      return isBlockElement || isImage;
     });
 
-    // If we have block children, render a div instead of p
-    if (hasBlockChild) {
-      return <div className="my-4 space-y-2">{children}</div>;
+    // If this paragraph contains only an image or has block children, render as div
+    if (hasOnlyImage || hasBlockChild) {
+      return <div className="my-4">{children}</div>;
     }
 
     // Otherwise, render a regular paragraph
