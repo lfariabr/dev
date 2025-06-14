@@ -42,7 +42,7 @@ export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
 
   return (
     <MainLayout>
-      <div className="container py-12 max-w-4xl">
+      <div className="container py-16 mx-auto px-4">
         {/* Loading state */}
         {loading && (
           <div className="flex justify-center items-center py-20">

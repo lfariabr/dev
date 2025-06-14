@@ -54,7 +54,7 @@ export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
 
   return (
     <MainLayout>
-      <div className="container py-8">
+      <div className="container py-16 mx-auto px-4">
         {loading ? (
           <div className="flex flex-col items-center justify-center min-h-[400px]">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />

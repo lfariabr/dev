@@ -1,12 +1,20 @@
 // frontend/src/components/chat/MarkdownMessage.tsx
 'use client';
 
-import React from 'react';
+import React, { Children, isValidElement } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
+import type { Components } from 'react-markdown';
+
+type CodeProps = React.HTMLAttributes<HTMLElement> & {
+  inline?: boolean;
+  node?: any;
+  className?: string;
+  children?: React.ReactNode;
+};
 
 interface MarkdownMessageProps {
   content: string;
@@ -26,19 +34,66 @@ export function MarkdownMessage({
     article: 'prose-lg leading-relaxed'
   };
 
+  // Custom component to handle paragraphs and their children
+  const Paragraph = ({ node, children, ...props }: any) => {
+    // Check if any direct child is a block-level element
+    const hasBlockChild = Children.toArray(children).some(child => {
+      if (!isValidElement(child)) return false;
+      
+      // List of block-level elements that can't be inside <p>
+      const blockElements = [
+        'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr', 'th', 'td',
+        'blockquote', 'pre', 'hr', 'figure', 'figcaption', 'video', 'iframe', 'form', 'fieldset', 'address'
+      ];
+      
+      return blockElements.includes(child.type as string) || 
+             (child.props?.node?.tagName && blockElements.includes(child.props.node.tagName));
+    });
+
+    // If we have block children, render a div instead of p
+    if (hasBlockChild) {
+      return <div className="my-4 space-y-2">{children}</div>;
+    }
+
+    // Otherwise, render a regular paragraph
+    return <p className="my-4 leading-relaxed" {...props}>{children}</p>;
+  };
+
   return (
     <div className={cn(baseStyles, variantStyles[variant], className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // Headings
+          // Use our custom paragraph component
+          p: Paragraph,
+          
+          // Headers
           h1: ({ node, ...props }) => <h1 className="text-4xl font-bold mt-8 mb-4" {...props} />,
           h2: ({ node, ...props }) => <h2 className="text-3xl font-semibold mt-8 mb-3" {...props} />,
           h3: ({ node, ...props }) => <h3 className="text-2xl font-medium mt-6 mb-3" {...props} />,
           h4: ({ node, ...props }) => <h4 className="text-xl font-medium mt-4 mb-2" {...props} />,
           
-          // Paragraphs
-          p: ({ node, ...props }) => <p className="my-4 leading-relaxed" {...props} />,
+          // Images - Render as figure to avoid nesting issues
+          img: ({ node, alt, src, ...props }) => (
+            <figure className="my-6">
+              <img 
+                src={src} 
+                alt={alt || 'Image'} 
+                className="rounded-lg border shadow-sm mx-auto max-h-[500px] w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.alt = 'Failed to load image';
+                  target.classList.add('bg-gray-100', 'p-4');
+                }}
+                {...props}
+              />
+              {alt && (
+                <figcaption className="text-center text-sm text-muted-foreground mt-2">
+                  {alt}
+                </figcaption>
+              )}
+            </figure>
+          ),
           
           // Lists
           ul: ({ node, ...props }) => (
@@ -60,25 +115,38 @@ export function MarkdownMessage({
           ),
           
           // Code blocks
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
-            return !inline && match ? (
-              <div className="my-4 rounded-lg overflow-hidden">
-                <SyntaxHighlighter
-                  style={vscDarkPlus}
-                  language={match[1]}
-                  PreTag="div"
-                  className="text-sm leading-relaxed"
-                  customStyle={{ margin: 0 }}
+          code: ({ inline, className, children, ...props }: CodeProps) => {
+            const hasLang = className?.startsWith('language-');
+            const language = hasLang ? className?.replace('language-', '') : '';
+          
+            if (inline || !hasLang) {
+              return (
+                <code
+                  className="bg-gray-800/70 text-gray-100 font-mono text-sm px-1.5 py-0.5 rounded"
                   {...props}
                 >
-                  {String(children).replace(/\n$/, '')}
-                </SyntaxHighlighter>
-              </div>
-            ) : (
-              <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
-                {children}
-              </code>
+                  {String(children).trim()}
+                </code>
+              );
+            }
+          
+            return (
+              <SyntaxHighlighter
+                style={vscDarkPlus}
+                language={language}
+                PreTag="div"
+                customStyle={{
+                  padding: '1rem',
+                  borderRadius: '0.375rem',
+                  background: '#1e1e1e',
+                  fontSize: '0.875rem',
+                  marginTop: '1rem',
+                  marginBottom: '1rem',
+                }}
+                {...props}
+              >
+                {String(children).trim()}
+              </SyntaxHighlighter>
             );
           },
           
@@ -92,22 +160,6 @@ export function MarkdownMessage({
             />
           ),
           
-          // Images
-          img: ({ node, ...props }) => (
-            <div className="my-6 rounded-lg overflow-hidden border">
-              <img 
-                className="w-full h-auto" 
-                {...props} 
-                alt={props.alt || ''}
-              />
-              {props.alt && (
-                <p className="text-center text-sm text-muted-foreground mt-2">
-                  {props.alt}
-                </p>
-              )}
-            </div>
-          ),
-          
           // Horizontal rule
           hr: ({ node, ...props }) => (
             <hr className="my-8 border-t border-border" {...props} />
@@ -115,21 +167,24 @@ export function MarkdownMessage({
           
           // Tables
           table: ({ node, ...props }) => (
-            <div className="my-6 overflow-x-auto">
-              <table className="w-full border-collapse" {...props} />
+            <div className="overflow-x-auto my-4">
+              <table className="min-w-full divide-y divide-gray-700" {...props} />
             </div>
           ),
+          thead: ({ node, ...props }) => (
+            <thead className="bg-gray-800" {...props} />
+          ),
+          tbody: ({ node, ...props }) => (
+            <tbody className="divide-y divide-gray-700" {...props} />
+          ),
+          tr: ({ node, ...props }) => (
+            <tr className="hover:bg-gray-800/50" {...props} />
+          ),
           th: ({ node, ...props }) => (
-            <th 
-              className="border border-border px-4 py-2 text-left bg-muted/50" 
-              {...props} 
-            />
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider" {...props} />
           ),
           td: ({ node, ...props }) => (
-            <td 
-              className="border border-border px-4 py-2" 
-              {...props} 
-            />
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300" {...props} />
           ),
         }}
       >
