@@ -2,7 +2,7 @@
 
 import React from "react";
 import { MainLayout } from "@/components/layouts/MainLayout";
-import { useArticle } from "@/lib/hooks/useArticles";
+import { useArticleBySlug } from "@/lib/hooks/useArticles";
 import { AlertCircle, ArrowLeft, Calendar, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 import { MarkdownMessage } from '@/components/chat/MarkdownMessage';
 
 interface ArticleDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>; // Using [id] as slug for now
 }
 
 // Format date safely with fallback
@@ -31,9 +31,9 @@ const formatDateSafe = (dateString: string) => {
 export default function ArticleDetailPage({ params }: ArticleDetailPageProps) {
   // Properly unwrap params with React.use() for Next.js 15
   const resolvedParams = React.use(params);
-  const { id } = resolvedParams;
+  const { id } = resolvedParams; // treat id as slug
 
-  const { article, loading, error, notFound: articleNotFound } = useArticle(id);
+  const { article, loading, error, notFound: articleNotFound } = useArticleBySlug(id);
   
   // If article not found, show 404
   if (articleNotFound) {

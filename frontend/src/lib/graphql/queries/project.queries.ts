@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 export const PROJECT_FRAGMENT = gql`
   fragment ProjectFields on Project {
     id
+    slug
     title
     description
     imageUrl
@@ -38,6 +39,16 @@ export const GET_FEATURED_PROJECTS = gql`
 export const GET_PROJECT = gql`
   query GetProject($id: ID!) {
     project(id: $id) {
+      ...ProjectFields
+    }
+  }
+  ${PROJECT_FRAGMENT}
+`;
+
+// Query to get a single project by slug
+export const GET_PROJECT_BY_SLUG = gql`
+  query GetProjectBySlug($slug: String!) {
+    projectBySlug(slug: $slug) {
       ...ProjectFields
     }
   }

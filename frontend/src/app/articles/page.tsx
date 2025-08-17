@@ -68,7 +68,7 @@ function ArticleCard({ article }: { article: Article }) {
     : article.content);
 
   return (
-    <Link href={`/articles/${article.id}`} className="block group border-b pb-8 last:border-b-0">
+    <Link href={`/articles/${article.slug}`} className="block group border-b pb-8 last:border-b-0">
       <div className="flex flex-col md:flex-row gap-6 relative">
         {/* Article image */}
         {article.imageUrl && (

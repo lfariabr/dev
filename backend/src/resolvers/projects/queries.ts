@@ -9,6 +9,10 @@ export const projectQueries = {
     return await Project.findById(id);
   },
   
+  projectBySlug: async (_: any, { slug }: { slug: string }) => {
+    return await Project.findOne({ slug });
+  },
+  
   featuredProjects: async () => {
     return await Project.find({ featured: true }).sort({ order: 1, createdAt: -1 });
   },

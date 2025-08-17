@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 export const ARTICLE_FRAGMENT = gql`
   fragment ArticleFields on Article {
     id
+    slug
     title
     content
     imageUrl
@@ -39,6 +40,16 @@ export const GET_PUBLISHED_ARTICLES = gql`
 export const GET_ARTICLE = gql`
   query GetArticle($id: ID!) {
     article(id: $id) {
+      ...ArticleFields
+    }
+  }
+  ${ARTICLE_FRAGMENT}
+`;
+
+// Query to get a single article by slug
+export const GET_ARTICLE_BY_SLUG = gql`
+  query GetArticleBySlug($slug: String!) {
+    articleBySlug(slug: $slug) {
       ...ArticleFields
     }
   }

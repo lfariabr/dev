@@ -63,7 +63,7 @@ export default function ProjectsPage() {
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link href={`/projects/${project.id}`} className="relative block group">
+    <Link href={`/projects/${project.slug}`} className="relative block group">
       <div className="group rounded-lg border overflow-hidden bg-card text-card-foreground shadow hover:shadow-lg transition-all hover:scale-[1.02] h-full">
         <div className="aspect-video w-full bg-muted relative overflow-hidden">
           {project.imageUrl ? (

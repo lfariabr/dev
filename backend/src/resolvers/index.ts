@@ -7,6 +7,17 @@ import { userMutations } from './users/mutations';
 import { rateTestQueries } from './rateTest/queries';
 import { chatbotQueries } from './chatbot/queries';
 import { chatbotMutations } from './chatbot/mutations';
+import Project from '../models/Project';
+
+function slugify(text: string) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 // Combine all resolvers
 export const resolvers = {
@@ -23,5 +34,20 @@ export const resolvers = {
     ...articleMutations,
     ...userMutations,
     ...chatbotMutations,
-  }
+  },
+  
+  Project: {
+    // Ensure non-null slug by backfilling if missing
+    async slug(parent: any) {
+      if (parent.slug) return parent.slug;
+      if (!parent.title) return null;
+      const generated = slugify(parent.title);
+      try {
+        await Project.findByIdAndUpdate(parent.id, { $set: { slug: generated } }, { new: false });
+      } catch (e) {
+        // ignore duplicate or other errors here; still return computed slug
+      }
+      return generated;
+    },
+  },
 };

@@ -18,6 +18,7 @@ export const typeDefs = `#graphql
     # Project queries
     projects: [Project!]!
     project(id: ID!): Project
+    projectBySlug(slug: String!): Project
     featuredProjects: [Project!]!
     
     # Article queries

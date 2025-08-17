@@ -2,7 +2,7 @@
 
 import React from "react";
 import { MainLayout } from "@/components/layouts/MainLayout";
-import { useProject } from "@/lib/hooks/useProjects";
+import { useProjectBySlug } from "@/lib/hooks/useProjects";
 import { AlertCircle, ArrowLeft, Calendar, Github, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 import { MarkdownMessage } from '@/components/chat/MarkdownMessage';
 
 interface ProjectDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>; // Using [id] as slug for now
 }
 
 // Format date safely with fallback
@@ -43,9 +43,9 @@ const formatDateSafe = (dateString: string) => {
 export default function ProjectDetailPage({ params }: ProjectDetailPageProps) {
   // Properly unwrap params with React.use() for Next.js 15
   const resolvedParams = React.use(params);
-  const { id } = resolvedParams;
+  const { id } = resolvedParams; // treat id as slug
 
-  const { project, loading, error, notFound: projectNotFound } = useProject(id);
+  const { project, loading, error, notFound: projectNotFound } = useProjectBySlug(id);
   
   // If project not found, show 404
   if (projectNotFound) {

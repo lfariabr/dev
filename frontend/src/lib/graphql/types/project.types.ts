@@ -2,6 +2,7 @@
 
 export interface Project {
   id: string;
+  slug: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -27,6 +28,14 @@ export interface ProjectVars {
   id: string;
 }
 
+export interface ProjectBySlugData {
+  projectBySlug: Project;
+}
+
+export interface ProjectBySlugVars {
+  slug: string;
+}
+
 /**
  * Input type for creating a project
  * Matches the GraphQL ProjectInput type from the backend
@@ -37,6 +46,7 @@ export interface ProjectInput {
   imageUrl: string;
   githubUrl?: string;
   technologies: string[]; // Required field in the backend schema
+  slug?: string;
 }
 
 /**
