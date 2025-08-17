@@ -6,8 +6,9 @@
   "website": "https://luisfaria.dev",
   "linkedin": "https://www.linkedin.com/in/lfariabr",
   "github": "https://github.com/lfariabr",
-  "summary": "Luis Faria is a Fullstack Software Engineer and Technical Project Manager with 10+ years of experience in building scalable SaaS, CRM, and ERP systems. He blends strong engineering skills with delivery leadership to ship high-impact digital products. He has led and coded projects involving Django, FastAPI, React, Next.js, GraphQL, and DevOps, and is pursuing a Master's in Software Engineering and AI at Torrens University.",
-  "current_focus": "Building AI-enabled business tools and dashboards with Django, Streamlit, and FastAPI. Also open to sponsorship and leadership roles in software engineering or technical product management.",
+  "devto": "https://dev.to/lfariaus",
+  "summary": "Software Engineer with 10+ years leading technical projects end-to-end across Healthcare, Tech, Agencies, and Games. I break down complex backlogs with cross-functional teams and ship production-grade software in Python and JavaScript. I build systems that automate operations, drive revenue, and delight users.",
+  "current_focus": "Pursuing a Master's in Software Engineering and AI (Torrens). Building AI-enabled products and automation—full‑stack apps, data pipelines, and chatbots—using Python, TypeScript, GraphQL, and modern DevOps. Open to sponsorship and engineering/TPM leadership roles.",
   "skills": {
     "languages": [
       "Python",
@@ -31,14 +32,14 @@
       "NGINX",
       "CI/CD",
       "AWS",
-      "GCP",
-      "DigitalOcean"
+      "DigitalOcean",
+      "Railway"
     ],
     "databases": [
       "PostgreSQL",
+      "Redis",
       "MongoDB",
-      "MySQL",
-      "Redis"
+      "MySQL"
     ],
     "data_ml": [
       "Pandas",
@@ -53,9 +54,14 @@
   },
   "projects": [
     {
+      "name": "Portfolio (MERN/Next.js)",
+      "description": "Full‑stack portfolio built with Next.js, Node.js, GraphQL, and OpenAI. Features secure auth, dynamic blog/articles, project showcase, and an AI-powered chatbot with rate limiting.",
+      "impact": "Public, open-source; used to demonstrate engineering capabilities and DX."
+    },
+    {
       "name": "Konquista",
-      "description": "WhatsApp CRM microSaaS used by 20+ clinics, automating 30K+ messages/month. Built with Django, Redis, Celery, and Docker. Open-sourced at https://github.com/lfariabr/konquest",
-      "impact": "300K+ interactions/year, 20+ businesses onboarded"
+      "description": "WhatsApp CRM microSaaS used by 20+ retail clinics, automating 30K+ messages/month. Built with Django, Celery/Redis, GraphQL, and Docker.",
+      "impact": "300K+ interactions/year; operational automation at scale"
     },
     {
       "name": "BI Dashboard",
@@ -81,9 +87,9 @@
   "experience": [
     {
       "title": "Software Engineer / Project Lead",
-      "company": "Pr\u00f3-Corpo Est\u00e9tica Avan\u00e7ada",
+      "company": "Pró-Corpo Estética Avançada",
       "location": "Remote",
-      "duration": "Dec 2018 \u2013 May 2025",
+      "duration": "Dec 2018 – May 2025",
       "achievements": [
         "Designed and scaled Konquista (Django + Celery/Redis)",
         "Built dashboards and lead scoring tools",
@@ -96,10 +102,10 @@
       "title": "Technical Project Manager",
       "company": "ABlab Performance Marketing",
       "location": "Remote",
-      "duration": "Jun 2016 \u2013 Dec 2018",
+      "duration": "Jun 2016 – Dec 2018",
       "clients": [
         "Sodexo",
-        "Citro\u00ebn",
+        "Citroën",
         "Ultragaz",
         "Oxiteno"
       ]
@@ -108,7 +114,7 @@
       "title": "Technical Project Manager",
       "company": "Hive Digital Media",
       "location": "Remote",
-      "duration": "Jun 2015 \u2013 Jun 2016",
+      "duration": "Jun 2015 – Jun 2016",
       "clients": [
         "Ambev",
         "Itau",
@@ -121,23 +127,83 @@
     {
       "degree": "Master's in Software Engineering and AI",
       "institution": "Torrens University Australia",
-      "years": "2025\u20132027"
+      "years": "2025–2027"
     },
     {
       "degree": "BA in Systems Analysis and Development",
       "institution": "UNINOVE",
-      "years": "2019\u20132022"
+      "years": "2019–2022"
     }
   ],
   "certifications": [
     "Scrum Master",
     "Supervised Machine Learning (Stanford Online)",
     "Python Bootcamp - Flask & Django",
-    "Google AdWords \u2013 Advertising Fundamentals"
+    "Google AdWords – Advertising Fundamentals"
   ],
   "languages": {
     "English": "Native or Bilingual",
     "Portuguese": "Native or Bilingual",
     "Spanish": "Full Professional"
-  }
+  },
+  "articles": [
+    {
+      "title": "From Groomzilla to Full-Stack Engineer: Building Wedstack",
+      "platform": "dev.to",
+      "published": "2025-08-17",
+      "language": "English"
+    },
+    {
+      "title": "Engineering Principles Applied to Daily Life: Concierge Edition",
+      "platform": "dev.to",
+      "published": "2025-08-08",
+      "language": "English"
+    },
+    {
+      "title": "My Database Conundrum: MongoDB vs Supabase for a Pure Python App",
+      "platform": "dev.to",
+      "published": "2025-07-29",
+      "edited": "2025-07-30",
+      "language": "English"
+    },
+    {
+      "title": "Scaling Fastier: My AWS Solutions Architect Journey with a Virtual Challenge",
+      "platform": "dev.to",
+      "published": "2025-07-24",
+      "language": "English"
+    },
+    {
+      "title": "How I Tackled the Commonwealth's Bank Software Engineering Challenge",
+      "platform": "dev.to",
+      "published": "2025-07-14",
+      "language": "English"
+    },
+    {
+      "title": "ClinicTrends AI - Transforming Customer Feedback Into Intelligent Insights",
+      "platform": "dev.to",
+      "published": "2025-07-03",
+      "edited": "2025-07-05",
+      "language": "English"
+    },
+    {
+      "title": "How I Created a Daily Follow-Up System to Dominate My Master’s Degree Assignments",
+      "platform": "dev.to",
+      "published": "2025-06-10",
+      "language": "English"
+    },
+    {
+      "title": "How I Turned a 30-Minute Daily Task into a 5-Minute Automation (Saved 105 Hours a Year!)",
+      "platform": "dev.to",
+      "published": "2025-06-04",
+      "edited": "2025-06-10",
+      "language": "English"
+    },
+    {
+      "title": "From Google Sheets to a Scalable SaaS: Building Konquista with Python and Django",
+      "platform": "dev.to",
+      "published": "2025-05-23",
+      "edited": "2025-06-10",
+      "language": "English"
+    }
+  ]
 }
