@@ -4,9 +4,9 @@ Done:
 - Integrate google analytics
 - Add support to markdown on Projects and Articles
 - Add support to images on Projects and Articles (uses markdown syntax)
-
-In Progress:
 - Optimize the flow of chatbot, make it more clear to user
 
+In Progress:
+
 To do:
-- Check SEO
+- Check SEO's progress

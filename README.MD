@@ -1,7 +1,7 @@
 # Luis Faria Portfolio Project
 
 ## Project Overview
-A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL, and AWS.
+A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL and DigitalOcean.
 
 ## Key Features
 - Portfolio showcase with project highlights
@@ -23,16 +23,16 @@ A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL,
 - Apollo Server for GraphQL
 - Relay for efficient data fetching
 - Redis for caching and rate limiting
-- AWS RDS/DynamoDB for data storage
+- MongoDB for data storage
 - JWT for secure authentication
 
 ## Project Structure
 ```
 luisfaria/
-├── frontend/          # Next.js with TypeScript
-├── backend/           # Node.js, Apollo, GraphQL API
-├── shared/            # Shared types and utilities
-└── docs/              # Project documentation
+├── _docs/          # Project documentation
+├── frontend/       # Next.js with TypeScript
+├── backend/        # Node.js, Apollo, GraphQL API
+└── server/         # Nginx and GoLive procedure (hidden)
 ```
 
 ## Getting Started

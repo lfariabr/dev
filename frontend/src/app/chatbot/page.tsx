@@ -213,11 +213,11 @@ export default function ChatbotPage() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600 mb-4">
-            Meet Luis's AI Assistant
+            Meet my AI Assistant
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Get instant answers about Luis's experience, projects, and expertise.
-            Trained on his professional background and technical knowledge.
+            Get instant answers about my experience, projects, and expertise.
+            Trained on my professional background and technical knowledge.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -227,7 +227,7 @@ export default function ChatbotPage() {
               </div>
               <h3 className="font-semibold text-lg mb-2">Instant Answers</h3>
               <p className="text-muted-foreground text-sm">
-                Get quick responses about Luis's background, skills, and experience.
+                Get quick responses about my background, skills, and experience.
               </p>
             </div>
             
@@ -263,11 +263,11 @@ export default function ChatbotPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-3xl mx-auto">
               {[
                 {
-                  question: "What's Luis's experience with React?",
+                  question: "What's Luis' experience with React?",
                   description: "Learn about his React.js expertise and projects"
                 },
                 {
-                  question: "Tell me about Luis's latest projects",
+                  question: "Tell me about Luis' latest projects",
                   description: "Discover his most recent work and contributions"
                 },
                 {
@@ -294,15 +294,27 @@ export default function ChatbotPage() {
 
         {/* Authentication Alert */}
         {!isAuthenticated && (
-          <Alert className="mb-6 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+          <Alert className="mb-6 border-blue-200 dark:border-blue-800 bg-blue-50/70 dark:bg-blue-900/20">
             <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-            <div className="ml-3">
-              <AlertTitle className="text-blue-800 dark:text-blue-200 font-medium">
-                Authentication Required
+            <div className="ml-3 flex-1">
+              <AlertTitle className="text-blue-800 dark:text-blue-200 font-semibold">
+                Sign in to chat with Luis' AI Assistant
               </AlertTitle>
               <AlertDescription className="text-blue-700 dark:text-blue-300">
-                Please <a href="/login" className="underline font-medium">log in</a> or <a href="/register" className="underline font-medium">register</a> to use the chatbot. 
-                {isAuthenticated ? 'You can send up to 5 messages per hour.' : 'Authenticated users get 5 messages per hour.'}
+                <p className="mb-3">
+                  Please log in or create an account to start a conversation.
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button asChild size="sm">
+                    <a href="/login">Log in</a>
+                  </Button>
+                  <Button asChild variant="outline" size="sm">
+                    <a href="/register">Create account</a>
+                  </Button>
+                  <span className="text-xs text-blue-700/80 dark:text-blue-300/80 inline-flex items-center gap-1">
+                    <ClockIcon className="h-3.5 w-3.5" /> 5 messages/hour for authenticated users
+                  </span>
+                </div>
               </AlertDescription>
             </div>
           </Alert>
@@ -391,7 +403,7 @@ export default function ChatbotPage() {
         </div>
         
         <div className="mt-6 text-sm text-muted-foreground text-center">
-          <p>This AI assistant is powered by a custom model trained on Luis's technical expertise and preferences.</p>
+          <p>This AI assistant is powered by a custom model trained on Luis' technical expertise and preferences.</p>
           <p>All conversations are private and not stored longer than needed to provide the service.</p>
           
           {rateLimitResetTime && (
