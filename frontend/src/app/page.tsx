@@ -12,7 +12,7 @@ export default function Home() {
               Luis Faria
             </h1>
             <p className="max-w-[700px] text-lg text-center text-muted-foreground mx-auto">
-              Software Engineer | Full Stack Developer | Project Manager
+              Software Engineer | Project Lead
             </p>
           </div>
 

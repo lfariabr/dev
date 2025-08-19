@@ -7,6 +7,7 @@ import { userMutations } from './users/mutations';
 import { rateTestQueries } from './rateTest/queries';
 import { chatbotQueries } from './chatbot/queries';
 import { chatbotMutations } from './chatbot/mutations';
+import { screamMutations } from './screams/mutations';
 import Project from '../models/Project';
 
 function slugify(text: string) {
@@ -34,6 +35,7 @@ export const resolvers = {
     ...articleMutations,
     ...userMutations,
     ...chatbotMutations,
+    ...screamMutations,
   },
   
   Project: {

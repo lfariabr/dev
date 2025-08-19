@@ -75,5 +75,8 @@ export class RateLimiter {
   }
 }
 
+// Rate limit for Goggins Mode (24h window by default)
+export const gogginsRateLimiter = new RateLimiter('goggins:', 86400);
+
 // Create a singleton instance
 export const rateLimiter = new RateLimiter();

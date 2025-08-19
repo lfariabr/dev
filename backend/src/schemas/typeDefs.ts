@@ -3,6 +3,7 @@ import { articleTypes } from './types/articleTypes';
 import { userTypes } from './types/userTypes';
 import { rateTestTypes } from './types/rateTestTypes';
 import { chatbotTypes } from './types/chatbotTypes';
+import { screamTypes } from './types/screamTypes';
 
 export const typeDefs = `#graphql
   ${projectTypes}
@@ -10,6 +11,7 @@ export const typeDefs = `#graphql
   ${userTypes}
   ${rateTestTypes}
   ${chatbotTypes}
+  ${screamTypes}
 
   type Query {
     # Test query
@@ -42,27 +44,26 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
-    # Project mutations
+    # Project and Article mutations
     createProject(input: ProjectInput!): Project!
     updateProject(id: ID!, input: ProjectUpdateInput!): Project!
-    deleteProject(id: ID!): Boolean!
-    
-    # Article mutations
+    deleteProject(id: ID!): Boolean!    
     createArticle(input: ArticleInput!): Article!
     updateArticle(id: ID!, input: ArticleUpdateInput!): Article!
     deleteArticle(id: ID!): Boolean!
     publishArticle(id: ID!): Article!
     unpublishArticle(id: ID!): Article!
     
-    # Auth mutations
+    # Auth
     register(input: RegisterInput!): AuthPayload!
     login(input: LoginInput!): AuthPayload!
     logout: Boolean!
     updateUserRole(id: ID!, role: Role!): User!
     deleteUser(id: ID!): Boolean!
 
-    # Chatbot mutations
+    # openAI department
     askQuestion(question: String!): ChatResponse!
+    activateGogginsMode(input: ScreamInput!): Scream!
   }
 
   type Subscription {
@@ -71,7 +72,8 @@ export const typeDefs = `#graphql
     login: AuthPayload
     logout: Boolean
 
-    # Chatbot subscriptions
+    # openAI department
     chatHistory(limit: Int = 10, offset: Int = 0): [ChatMessage!]!
+    activateGogginsMode(input: ScreamInput!): Scream!
   }
 `;

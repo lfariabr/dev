@@ -68,12 +68,12 @@ export function Footer() {
               </li>
               <li>
                 <a 
-                  href="https://twitter.com/lfariabr" 
+                  href="https://dev.to/lfariaus" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Twitter
+                  Dev.to
                 </a>
               </li>
             </ul>
