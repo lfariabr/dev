@@ -33,6 +33,20 @@ export type GogginsDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
+// small helper to humanize seconds (e.g., 1h 12m, 04:35)
+function formatDuration(seconds?: number | null): string {
+  if (seconds == null || seconds <= 0) return '0s';
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.floor(seconds % 60);
+  if (h > 0) return `${h}h ${m}m`;
+  if (m >= 5) return `${m}m`;
+  // under 5 minutes show mm:ss
+  const mm = String(m).padStart(2, '0');
+  const ss = String(s).padStart(2, '0');
+  return `${mm}:${ss}`;
+}
+
 export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   const [secondsUntilReset, setSecondsUntilReset] = React.useState<number | null>(null);
   const [resultText, setResultText] = React.useState<string>("");
@@ -41,7 +55,7 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   const [remaining, setRemaining] = React.useState<number | null>(null);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { userEmail: '', explicitMode: false },
     mode: 'onSubmit',
@@ -72,7 +86,7 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
     onOpenChange(nextOpen);
   };
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
+  const onSubmit = async (values: z.output<typeof schema>) => {
     setResultText("");
     setErrorText("");
     // Clear any stale countdown before a new attempt
@@ -124,41 +138,51 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   };
 
   const disabled = loading || (secondsUntilReset != null && secondsUntilReset > 0);
+  const used = limit != null && remaining != null ? Math.max(0, (limit as number) - (remaining as number)) : null;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[100vw] max-w-[90vw] xl:max-w-[90vw] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[96vw] max-w-[96vw] sm:max-w-[92vw] md:max-w-[85vw] lg:max-w-[75vw] xl:max-w-[65vw] h-auto max-h-[92vh] md:max-h-[88vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-            🧠 Goggins Mode
-            <span className="text-xs bg-black text-white dark:bg-white dark:text-black px-2 py-1 rounded-full">
-              BETA
+          <DialogTitle className="flex items-center gap-2">
+            Goggins Mode
+            <span
+              className="text-[10px] uppercase tracking-wide bg-black text-white dark:bg-white dark:text-black px-2 py-0.5 rounded-full"
+              aria-label="Beta"
+              title="Beta"
+            >
+              Beta
             </span>
           </DialogTitle>
           <DialogDescription>
-            <div className="flex items-center gap-4">
-            <img
-              src="/goggins.png"
-              alt="Goggins"
-              className="w-14 h-14 rounded-full border-2 border-black shadow"
-            />
-            <div>
-              {/* <h3 className="text-lg font-bold">Goggins Mode Activated</h3> */}
-              <p className="text-sm text-muted-foreground">
-              <span className="font-bold">Get a brutal truth bomb.</span>
-              </p>
-              <p className="text-sm text-muted-foreground">
-              Enter your email to receive today’s push.
-              </p>
-            </div>
-          </div>
+            <p className="font-bold">Get a brutal truth bomb.</p>
+            <p className="text-muted-foreground">Enter your email to receive the push you didn't even know you needed.</p>
           </DialogDescription>
         </DialogHeader>
-        
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {!resultText && (
+            {(limit != null && remaining != null) && (
+              <div className="flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-2 text-xs font-medium">
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" /> Requests left
+                  </span>
+                  <span className="text-xs text-muted-foreground">{remaining}/{limit}</span>
+                  {used != null && limit != null && (
+                    <div className="ml-2 h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                      <div className="h-full bg-emerald-500" style={{ width: `${(used as number) / (limit as number) * 100}%` }} />
+                    </div>
+                  )}
+                </div>
+                {secondsUntilReset != null && secondsUntilReset > 0 && (
+                  <span className="text-xs rounded-full bg-amber-100 px-2 py-0.5 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">
+                    Resets in {formatDuration(secondsUntilReset)}
+                  </span>
+                )}
+              </div>
+            )}
+
             <FormField
               control={form.control}
               name="userEmail"
@@ -172,43 +196,36 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
                 </FormItem>
               )}
             />
-          )}
-          <FormField
+
+            <FormField
               control={form.control}
               name="explicitMode"
               render={({ field }) => (
-                <FormItem>
-                  <div className="flex items-center justify-between">
-                    <FormLabel className="font-bold">Select your tone:</FormLabel>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {field.value
-                      ? '🔥 Unfiltered: Expect profanity and max intensity.'
-                      : '⚡ Respectful Mode: No swearing, but still brutally honest.'}
-                  </p>
+                <FormItem className="flex items-center justify-between space-y-0">
+                  <FormLabel>Explicit Mode</FormLabel>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
                 </FormItem>
               )}
             />
 
             {resultText && (
-              <div className="space-y-2">
-                <FormLabel>💬 Goggins Has Spoken</FormLabel>
-                <blockquote className="text-base italic bg-zinc-50 dark:bg-zinc-900 dark:text-white border-l-4 border-orange-600 pl-4 pr-2 py-3 rounded-md shadow-sm">
-                  {resultText}
-                </blockquote>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled
-                    className="cursor-not-allowed opacity-60"
-                  >
-                    Share <span className="ml-1 text-xs text-muted-foreground">(Coming Soon)</span>
-                  </Button>
+              <div className="space-y-3">
+                <FormLabel className="text-sm font-medium">Response</FormLabel>
+                <div className="rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60">
+                  <div className="flex gap-3 px-4 py-4">
+                    <div className="select-none text-zinc-400 dark:text-zinc-500">“</div>
+                    <div className="flex-1">
+                      <div className="border-l-2 border-zinc-300 dark:border-zinc-700 pl-4">
+                        <p className="whitespace-pre-wrap text-[0.975rem] leading-relaxed">
+                          {resultText}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end">
                   <Button
                     type="button"
                     variant="secondary"
@@ -234,7 +251,7 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
                 <AlertDescription>
                   {errorText}
                   {secondsUntilReset != null && secondsUntilReset > 0 && (
-                    <span> Try again in {secondsUntilReset}s.</span>
+                    <span> Try again in {formatDuration(secondsUntilReset)}.</span>
                   )}
                 </AlertDescription>
               </Alert>
@@ -245,18 +262,15 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
                 Close
               </Button>
               <Button type="submit" disabled={disabled}>
-                {loading ? 'Generating…' : secondsUntilReset ? `Wait ${secondsUntilReset}s` : 'Generate'}
+                {loading
+                  ? 'Generating…'
+                  : secondsUntilReset
+                  ? `Wait ${formatDuration(secondsUntilReset)}`
+                  : remaining != null && limit != null
+                  ? `Generate (${remaining}/${limit})`
+                  : 'Generate'}
               </Button>
             </DialogFooter>
-            {(limit != null && remaining != null) && (
-              <p className="text-xs font-mono text-zinc-500">
-                <span className="text-xs">🧾 Requests left:</span>
-                <span className="ml-1 font-semibold text-black">{remaining}/{limit}</span>
-                {secondsUntilReset != null && secondsUntilReset > 0 && (
-                  <span className="ml-2 text-red-500 animate-pulse">⏳ resets in {secondsUntilReset}s</span>
-                )}
-              </p>
-            )}
           </form>
         </Form>
       </DialogContent>

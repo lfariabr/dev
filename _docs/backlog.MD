@@ -56,6 +56,8 @@ Here's the plan to accomplish it:
 - [X] integration test for activateGogginsMode with in-memory mongo/redis and mocked openAI  
 
 **Frontend:**
+> Goal: Build frontend dialog modal with graphql Call + apollo mutation to hit activateGogginsMode, show message, handle rate-limit (use resetIn for countdown).
+
 - [X] import ACTIVATE_GOGGINS_MODE mutation from `src/lib/graphql/mutations/scream.mutations.ts` using graphql-request
 - [X] create reusable component#1: Goggins Dialog Modal
 - [X] create reusable component#2: Goggins Floating Button 
@@ -63,10 +65,14 @@ Here's the plan to accomplish it:
 - [X] fine tune the experience on GogginsDialog increasing dialog, showing rate limit info and timer
 - [X] add "Copy" button to the generated text
 - [X] add Goggins image to the modal
+- [X] make Goggins icon a little bit bigger
+- [X] fix reset time in not appearing when in dark mode
+- [X] rethink how to show rate limit info... a little bit odd
 - [ ] add page test to render and assert that GogginsFab is rendered
 - [ ] add component tests with mocked apollo (happy path returning text and rate-limited path showing countdown)
-- [ ] build frontend dialog modal with graphql Call + apollo mutation to hit activateGogginsMode, show message, handle rate-limit (use resetIn for countdown).
+
 
 Backlog:
-- Check SEO's progress
-- (Optional) Add a second tab later: "APOD Time Travel" using NASA for an image-based surprise
+- [ ] when rate limit is achieved, load previous message from registered email
+- [ ] Check SEO's progress
+- [ ] (Optional) Add a second tab later: "APOD Time Travel" using NASA for an image-based surprise
