@@ -196,15 +196,19 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
             {resultText && (
               <div className="space-y-2">
                 <FormLabel>💬 Goggins Has Spoken</FormLabel>
-                {/* <Textarea
-                  readOnly
-                  value={resultText}
-                  className="min-h-[35vh] p-4 text-base leading-relaxed border-l-4 border-black bg-zinc-50 font-mono shadow-inner"
-                /> */}
-                  <blockquote className="text-base italic bg-zinc-50 border-l-4 border-orange-600 pl-4 pr-2 py-3 rounded-md shadow-sm">
-                    {resultText}
-                  </blockquote>
-                <div className="flex justify-end">
+                <blockquote className="text-base italic bg-zinc-50 dark:bg-zinc-900 dark:text-white border-l-4 border-orange-600 pl-4 pr-2 py-3 rounded-md shadow-sm">
+                  {resultText}
+                </blockquote>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled
+                    className="cursor-not-allowed opacity-60"
+                  >
+                    Share <span className="ml-1 text-xs text-muted-foreground">(Coming Soon)</span>
+                  </Button>
                   <Button
                     type="button"
                     variant="secondary"
