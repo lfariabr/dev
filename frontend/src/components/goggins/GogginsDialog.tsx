@@ -129,9 +129,11 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="w-[100vw] max-w-[90vw] xl:max-w-[90vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl font-bold text-zinc-900">
+          <DialogTitle className="flex items-center gap-2 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
             🧠 Goggins Mode
-            <span className="text-xs bg-black text-white px-2 py-1 rounded-full">BETA</span>
+            <span className="text-xs bg-black text-white dark:bg-white dark:text-black px-2 py-1 rounded-full">
+              BETA
+            </span>
           </DialogTitle>
           <DialogDescription>
             <div className="flex items-center gap-4">
