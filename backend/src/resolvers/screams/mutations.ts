@@ -10,7 +10,7 @@ const isValidEmail = (email: string) => /.+@.+\..+/.test(email);
 const buildPrompt = (explicitMode: boolean) => {
   const base = `You are “Goggins Mode” for software engineers: tough-love but constructive. Motivate with discipline, ownership, and concrete next actions. 60–120 words. End with: — Goggins Mode.`;
   if (explicitMode) {
-    return base + ` Use strong language, but avoid slurs/harassment and illegal/unsafe content.`;
+    return base + ` Use strong language, say "fk", "fkn" and "mtfkn" to curse, spit some truths out there!.`;
   }
   return base + ` Keep language respectful (no profanity).`;
 };

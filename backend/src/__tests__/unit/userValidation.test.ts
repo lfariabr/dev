@@ -1,4 +1,5 @@
 import { registerSchema, loginSchema } from '../../validation/schemas/user.schema';
+import { screamInputSchema } from '../../validation/schemas/scream.schema';
 
 describe('User Validation Schemas', () => {
   describe('Register Schema', () => {
@@ -87,6 +88,36 @@ describe('User Validation Schemas', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toContain('Password is required');
+      }
+    });
+    
+    // screamInputSchema tests
+    it('screamInputSchema should fail with invalid userEmail', () => {
+      const invalidData = {
+        userEmail: 'invalid-email',
+        explicitMode: false,
+      };
+      
+      const result = screamInputSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        // matches z.string().email('Invalid email address')
+        expect(result.error.issues[0].message).toContain('Invalid email address');
+      }
+    });
+
+    it('screamInputSchema should fail with non-boolean explicitMode', () => {
+      const invalidData = {
+        userEmail: 'test@example.com',
+        // '@ts-expect-error testing invalid type
+        explicitMode: 'invalid',
+      };
+      
+      const result = screamInputSchema.safeParse(invalidData);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        // zod default message for type mismatch
+        expect(result.error.issues[0].message).toContain('Expected boolean');
       }
     });
   });

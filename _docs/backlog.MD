@@ -48,10 +48,10 @@ Here's the plan to accomplish it:
 - [X] created model to store data Scream.ts and possibly grow it to subscription based product
 - [X] create activateGogginsMode resolver ( `src/resolvers/screams/mutations.ts`)
 - [X] register resolver at `src/resolvers/index.ts`
-- [ ] test mutation via graphQL Playground
-- [ ] add screamInput Zod schema and guard explicitMode
-- [ ] update unit test for rate limit paths (allowed vs blocked) and resetIn correctness
-- [ ] integration test for activateGogginsMode with in-memory mongo/redis and mocked openAI  
+- [X] test mutation via graphQL Playground
+- [X] add screamInput Zod schema and guard explicitMode
+- [X] update unit test for rate limit paths (allowed vs blocked) and resetIn correctness
+- [X] integration test for activateGogginsMode with in-memory mongo/redis and mocked openAI  
 - [ ] build frontend dialog modal with graphql Call + apollo mutation to hit activateGogginsMode, show message, handle rate-limit (use resetIn for countdown).
 
 Backlog:

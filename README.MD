@@ -9,6 +9,7 @@ A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL 
 - Secure login area with JWT authentication
 - AI-powered chatbot (rate-limited to 1 question per hour per user)
 - GraphQL API for portfolio and article data
+- MyScreams feature (rate-limited to 2 questions per 24h per user) (***work in progress***)
 
 ## Tech Stack
 ### Frontend

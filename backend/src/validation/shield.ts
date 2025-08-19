@@ -5,6 +5,7 @@ import { registerSchema, loginSchema } from './schemas/user.schema';
 import { projectInputSchema, projectUpdateSchema } from './schemas/project.schema';
 import { articleInputSchema, articleUpdateSchema } from './schemas/article.schema';
 import { chatbotInputSchema } from './schemas/chatbot.schema';
+import { screamInputSchema } from './schemas/scream.schema';
 
 // Authentication rules
 const isAuthenticated = rule({ cache: 'contextual' })(
@@ -58,6 +59,10 @@ const validateChatbotInput = rule({ cache: 'no_cache' })(
   validateInput(chatbotInputSchema, 'question')
 );
 
+const validateScreamInput = rule({ cache: 'no_cache' })(
+  validateInput(screamInputSchema, 'input')
+);
+
 // Helper function to combine rules
 function and(...rules: any[]) {
   return rule({ cache: 'no_cache' })(async (parent: any, args: any, context: any, info: any) => {
@@ -107,6 +112,7 @@ export const permissions = shield(
       
       // User mutations
       askQuestion: and(isAuthenticated, validateChatbotInput),
+      activateGogginsMode: validateScreamInput,
       logout: isAuthenticated,
     },
   },
