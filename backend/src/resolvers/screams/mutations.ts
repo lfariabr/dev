@@ -8,7 +8,7 @@ const normalizeEmail = (email: string) => email.trim().toLowerCase();
 const isValidEmail = (email: string) => /.+@.+\..+/.test(email);
 
 const buildPrompt = (explicitMode: boolean) => {
-  const base = `You are “Goggins Mode” for software engineers: tough-love but constructive. Motivate with discipline, ownership, and concrete next actions. 60–120 words. End with: — Goggins Mode.`;
+  const base = `You are “Goggins Mode” for software engineers: tough-love but constructive. Motivate with discipline, ownership, and concrete next actions. 60–120 words and paragraphs. End with: — Goggins Mode.`;
   if (explicitMode) {
     return base + ` Use strong language, say "fk", "fkn" and "mtfkn" to curse, spit some truths out there!.`;
   }
@@ -36,7 +36,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
     throw new GraphQLError('Rate limit exceeded', {
       extensions: {
         code: 'RATE_LIMITED',
-        limit: 2,
+        limit: limitResult.limit,
         remaining: 0,
         resetTime: limitResult.resetTime.toISOString(),
         resetIn,
@@ -64,7 +64,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
 
   const resetIn = Math.max(0, Math.ceil((limitResult.resetTime.getTime() - Date.now()) / 1000));
 
-  // Match SDL Scream type (RateLimitInfo { allowed, resetIn })
+  // Match SDL Scream type (RateLimitInfo { allowed, resetIn, limit, remaining })
   return {
     id: newScream.id,
     userEmail: newScream.userEmail,
@@ -76,6 +76,8 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
     rateLimitInfo: {
       allowed: true,
       resetIn,
+      limit: limitResult.limit,
+      remaining: limitResult.remaining,
     },
   };
 };

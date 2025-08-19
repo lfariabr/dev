@@ -6,6 +6,7 @@ import { AuthProvider } from "@/lib/auth/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { defaultMetadata } from "./metadata";
+import { GogginsFab } from "@/components/goggins/GogginsFab";
 
 export const metadata: Metadata = {
   ...defaultMetadata,
@@ -30,6 +31,7 @@ export default function RootLayout({
               <GoogleAnalytics />
               {children}
               <Toaster />
+              <GogginsFab />
             </AuthProvider>
           </ApolloProvider>
         </ThemeProvider>

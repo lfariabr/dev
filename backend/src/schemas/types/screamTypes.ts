@@ -21,5 +21,7 @@ export const screamTypes = `#graphql
   type RateLimitInfo {
     allowed: Boolean!
     resetIn: Int!
+    limit: Int!
+    remaining: Int!
   }
 `;

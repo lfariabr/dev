@@ -27,7 +27,7 @@ Here's the plan to accomplish it:
 #### AI context (prompt guidelines):
 - "Goggins Mode" activation: software engineer voice with Goggins energy.
 - Purpose: a focused wake-up call to get out of the comfort zone (60–120 words).
-- Constraints: can use adult language, profanity or insults; motivate with discipline, ownership, and action. Needs to be 18+
+- Constraints: can use adult language, profanity or insults; motivate with discipline, ownership, and action. Will have version 18+ and 18- (18+ can use adult language, profanity or insults; 18- can use only respectful tone).
 - Optional variables: day/time, recent commits/projects (if available) to personalize.
 
 #### Frontend
@@ -41,7 +41,9 @@ Here's the plan to accomplish it:
 - Log success with email hash (do not persist raw email), timestamp, and model used.
 - Optional: Discord webhook notification with a short snippet (first 100 chars).
 
-# status:
+# Task List:
+
+**Backend:**
 - [X] created screamtype
 - [X] created rate limit info
 - [X] imported screamtype and mutation to typeDefs
@@ -52,6 +54,17 @@ Here's the plan to accomplish it:
 - [X] add screamInput Zod schema and guard explicitMode
 - [X] update unit test for rate limit paths (allowed vs blocked) and resetIn correctness
 - [X] integration test for activateGogginsMode with in-memory mongo/redis and mocked openAI  
+
+**Frontend:**
+- [X] import ACTIVATE_GOGGINS_MODE mutation from `src/lib/graphql/mutations/scream.mutations.ts` using graphql-request
+- [X] create reusable component#1: Goggins Dialog Modal
+- [X] create reusable component#2: Goggins Floating Button 
+- [X] import the GogginsFab component into the layout.tsx file
+- [X] fine tune the experience on GogginsDialog increasing dialog, showing rate limit info and timer
+- [X] add "Copy" button to the generated text
+- [X] add Goggins image to the modal
+- [ ] add page test to render and assert that GogginsFab is rendered
+- [ ] add component tests with mocked apollo (happy path returning text and rate-limited path showing countdown)
 - [ ] build frontend dialog modal with graphql Call + apollo mutation to hit activateGogginsMode, show message, handle rate-limit (use resetIn for countdown).
 
 Backlog:
