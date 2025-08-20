@@ -8,6 +8,7 @@ import { rateTestQueries } from './rateTest/queries';
 import { chatbotQueries } from './chatbot/queries';
 import { chatbotMutations } from './chatbot/mutations';
 import { screamMutations } from './screams/mutations';
+import { sendGogginsEmailMutation } from './resend/mutations';
 import Project from '../models/Project';
 
 function slugify(text: string) {
@@ -36,6 +37,8 @@ export const resolvers = {
     ...userMutations,
     ...chatbotMutations,
     ...screamMutations,
+    // Wire Resend mutation
+    sendGogginsEmail: sendGogginsEmailMutation,
   },
   
   Project: {

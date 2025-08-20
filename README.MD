@@ -4,12 +4,14 @@
 A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL and DigitalOcean.
 
 ## Key Features
-- Portfolio showcase with project highlights
-- Articles section with categorization
-- Secure login area with JWT authentication
-- AI-powered chatbot (rate-limited to 1 question per hour per user)
-- GraphQL API for portfolio and article data
-- MyScreams feature (rate-limited to 2 questions per 24h per user) (***work in progress***)
+Version | Feature | Description
+--- | --- | ---
+1.1.0 | `feature/portfolio` | Portfolio showcase with project highlights
+1.2.0 | `feature/articles` | Articles section with categorization
+1.3.0 | `feature/auth` | Secure login area with JWT authentication
+1.4.0 | `feature/chatbot` | AI-powered chatbot (rate-limited to 1 question per hour per user)
+2.0.0 | `feature/myscreams` | MyScreams feature (rate-limited to 2 questions per 24h per user) (***work in progress***)
+3.0.0 | `feature/resend` | Resend integration (***work in progress***)
 
 ## Tech Stack
 ### Frontend

@@ -64,6 +64,9 @@ export const typeDefs = `#graphql
     # openAI department
     askQuestion(question: String!): ChatResponse!
     activateGogginsMode(input: ScreamInput!): Scream!
+
+    # Resend
+    sendGogginsEmail(to: String!): Boolean!
   }
 
   type Subscription {

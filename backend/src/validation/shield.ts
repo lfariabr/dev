@@ -114,6 +114,7 @@ export const permissions = shield(
       askQuestion: and(isAuthenticated, validateChatbotInput),
       activateGogginsMode: validateScreamInput,
       logout: isAuthenticated,
+      sendGogginsEmail: isAuthenticated,
     },
   },
   {
