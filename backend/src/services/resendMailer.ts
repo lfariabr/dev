@@ -1,7 +1,7 @@
 // resendMailer.ts
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY); // coloque a key no .env
+const resend = new Resend(process.env.RESEND_API_KEY); // add .env
 
 export type SendEmailResult = {
   data: any | null;
@@ -11,9 +11,9 @@ export type SendEmailResult = {
 export async function sendGogginsEmail(to: string): Promise<SendEmailResult> {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Luis Maluco <goggins@luisfaria.dev>', // e-mail do domínio verificado
+      from: 'Goggins <goggins@luisfaria.dev>', // e-mail do domínio verificado
       to,
-      subject: 'Your Goggins Message!',
+      subject: 'Your Wake Up Call!',
       html: `
         <h1>Stay Hard 💪</h1>
         <p>You asked for motivation, and it arrived!</p>
