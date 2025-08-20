@@ -12,6 +12,7 @@ interface Config {
     rateLimitWindow: number;
     rateLimitMaxRequests: number;
     openaiApiKey: string;
+    resendApiKey: string;
 }
 
 // Validate required environment variables
@@ -23,7 +24,8 @@ const requiredEnvVars = [
   'REDIS_URL',
   'OPENAI_API_KEY',
   'RATE_LIMIT_WINDOW',
-  'RATE_LIMIT_MAX_REQUESTS'
+  'RATE_LIMIT_MAX_REQUESTS',
+  'RESEND_API_KEY'
 ];
 const missingEnvVars = requiredEnvVars.filter(env => !process.env[env]);
 
@@ -40,6 +42,7 @@ const config: Config = {
     rateLimitWindow: parseInt(process.env.RATE_LIMIT_WINDOW || '60', 10),
     rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '5', 10),
     openaiApiKey: process.env.OPENAI_API_KEY || '',
+    resendApiKey: process.env.RESEND_API_KEY || '',
   };
   
 export default config;
