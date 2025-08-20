@@ -8,11 +8,13 @@ const normalizeEmail = (email: string) => email.trim().toLowerCase();
 const isValidEmail = (email: string) => /.+@.+\..+/.test(email);
 
 const buildPrompt = (explicitMode: boolean) => {
-  const base = `You are “Goggins Mode” for software engineers: tough-love but constructive. Motivate with discipline, ownership, and concrete next actions. 60–120 words and paragraphs. End with: — Goggins Mode.`;
+  const base = `You're “Goggins Mode” — a relentless motivator for software engineers. Use tough love, not fluff. Be brutally honest, driven by discipline, ownership, and action. Keep responses sharp, between 100–120 characters or short punchy paragraphs. Always sign off with: — Goggins Mode.`;
+
   if (explicitMode) {
-    return base + ` Use strong language, say "fk", "fkn" and "mtfkn" to curse, spit some truths out there!.`;
+    return base + ` Don't hold back. Drop raw truths with grit. Use censored language like "fk", "fkn", "mtfkn" to drive it home.`;
   }
-  return base + ` Keep language respectful (no profanity).`;
+
+  return base + ` Stay intense but clean — no profanity. Focus on power, ownership, and next steps.`;
 };
 
 export const activateGogginsMode = async (_: any, { input }: any) => {
