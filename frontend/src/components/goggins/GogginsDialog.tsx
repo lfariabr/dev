@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@apollo/client';
 import { ACTIVATE_GOGGINS_MODE } from '@/lib/graphql/mutations/scream.mutations';
+import Image from 'next/image';
 
 import {
   Dialog,
@@ -53,8 +54,12 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   const [errorText, setErrorText] = React.useState<string>("");
   const [limit, setLimit] = React.useState<number | null>(null);
   const [remaining, setRemaining] = React.useState<number | null>(null);
+  const [showEmail, setShowEmail] = React.useState<boolean>(true);
   const { toast } = useToast();
 
+  // useForm generics: <Input, Context, Output>
+  // With zod default(), input type has optional fields while output is required.
+  // Align them to fix the Resolver type mismatch.
   const form = useForm<z.input<typeof schema>, any, z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { userEmail: '', explicitMode: false },
@@ -62,6 +67,31 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   });
 
   const [mutate, { loading }] = useMutation(ACTIVATE_GOGGINS_MODE);
+
+  // load saved email on mount
+  React.useEffect(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? localStorage.getItem('gogginsEmail') : null;
+      if (saved) {
+        form.setValue('userEmail', saved);
+        setShowEmail(false);
+      }
+      // also load last message once on mount
+      const lastMsg = typeof window !== 'undefined' ? localStorage.getItem('gogginsLastMessage') : null;
+      if (lastMsg) setResultText(lastMsg);
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
+  // load last message whenever dialog opens
+  React.useEffect(() => {
+    if (!open) return;
+    try {
+      const lastMsg = typeof window !== 'undefined' ? localStorage.getItem('gogginsLastMessage') : null;
+      if (lastMsg) setResultText(lastMsg);
+    } catch {}
+  }, [open]);
 
   // countdown
   React.useEffect(() => {
@@ -81,7 +111,23 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
       setErrorText("");
       setLimit(null);
       setRemaining(null);
-      form.reset();
+      // keep email hidden if we have one saved
+      try {
+        const saved = typeof window !== 'undefined' ? localStorage.getItem('gogginsEmail') : null;
+        setShowEmail(!saved);
+      } catch {
+        setShowEmail(true);
+      }
+      form.reset({
+        userEmail: (() => {
+          try {
+            return (typeof window !== 'undefined' ? localStorage.getItem('gogginsEmail') : '') || '';
+          } catch {
+            return '';
+          }
+        })(),
+        explicitMode: false,
+      });
     }
     onOpenChange(nextOpen);
   };
@@ -89,6 +135,11 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
   const onSubmit = async (values: z.output<typeof schema>) => {
     setResultText("");
     setErrorText("");
+    // persist and hide the email input to free up space
+    try {
+      if (values.userEmail) localStorage.setItem('gogginsEmail', values.userEmail);
+    } catch {}
+    setShowEmail(false);
     // Clear any stale countdown before a new attempt
     setSecondsUntilReset(null);
     try {
@@ -111,7 +162,10 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
 
       const scream = data?.activateGogginsMode;
       if (scream) {
-        setResultText(scream.text as string);
+        const text = String(scream.text ?? '');
+        setResultText(text);
+        // persist last successful message
+        try { localStorage.setItem('gogginsLastMessage', text); } catch {}
         const allowed = scream.rateLimitInfo?.allowed;
         const resetIn = scream.rateLimitInfo?.resetIn as number | undefined;
         const lim = scream.rateLimitInfo?.limit as number | undefined;
@@ -142,21 +196,19 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="w-[96vw] max-w-[96vw] sm:max-w-[92vw] md:max-w-[85vw] lg:max-w-[75vw] xl:max-w-[65vw] h-auto max-h-[92vh] md:max-h-[88vh] overflow-y-auto">
+      <DialogContent className="w-[96vw] max-w-[420px] h-auto max-h-[92vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            Goggins Mode
-            <span
-              className="text-[10px] uppercase tracking-wide bg-black text-white dark:bg-white dark:text-black px-2 py-0.5 rounded-full"
-              aria-label="Beta"
-              title="Beta"
-            >
-              Beta
-            </span>
-          </DialogTitle>
+          <DialogTitle>Goggins Mode</DialogTitle>
           <DialogDescription>
-            <p className="font-bold">Get a brutal truth bomb.</p>
-            <p className="text-muted-foreground">Enter your email to receive the push you didn't even know you needed.</p>
+            {/* header row with avatar to relate visually */}
+            <div className="mb-2 flex items-center gap-3">
+              <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-black/10 dark:ring-white/20">
+                <Image src="/goggins.png" alt="Goggins" fill sizes="40px" className="object-cover" />
+              </span>
+              <p className="text-sm text-muted-foreground">
+                Get a short, tough-love nudge to get moving.
+              </p>
+            </div>
           </DialogDescription>
         </DialogHeader>
 
@@ -183,29 +235,53 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
               </div>
             )}
 
-            <FormField
-              control={form.control}
-              name="userEmail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="you@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {showEmail ? (
+              <FormField
+                control={form.control}
+                name="userEmail"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="you@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <div className="flex items-center justify-start">
+                <span className="inline-flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  Saved as {form.getValues('userEmail') || 'you@example.com'}
+                </span>
+              </div>
+            )}
 
             <FormField
               control={form.control}
               name="explicitMode"
               render={({ field }) => (
-                <FormItem className="flex items-center justify-between space-y-0">
-                  <FormLabel>Explicit Mode</FormLabel>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
+                <FormItem>
+                  <div className="flex items-center justify-between">
+                    <FormLabel className="font-medium">Select your tone</FormLabel>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} aria-label="Toggle explicit tone" />
+                    </FormControl>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {field.value ? (
+                      <>
+                        <span className="mr-1">🔥</span>
+                        Unfiltered — Expect profanity and max intensity.
+                      </>
+                    ) : (
+                      <>
+                        <span className="mr-1">💬</span>
+                        Filtered — Expect real hard truths, but respectful tone.
+                      </>
+                    )}
+                  </p>
                 </FormItem>
               )}
             />
@@ -213,19 +289,17 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
             {resultText && (
               <div className="space-y-3">
                 <FormLabel className="text-sm font-medium">Response</FormLabel>
-                <div className="rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60">
-                  <div className="flex gap-3 px-4 py-4">
-                    <div className="select-none text-zinc-400 dark:text-zinc-500">“</div>
-                    <div className="flex-1">
-                      <div className="border-l-2 border-zinc-300 dark:border-zinc-700 pl-4">
-                        <p className="whitespace-pre-wrap text-[0.975rem] leading-relaxed">
-                          {resultText}
-                        </p>
-                      </div>
-                    </div>
+                <div className="rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+                  <div className="border-l-4 border-orange-600 px-4 py-3">
+                    <blockquote className="whitespace-pre-wrap text-[0.975rem] leading-relaxed italic">
+                      {resultText}
+                    </blockquote>
                   </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-between gap-2">
+                  <Button type="button" variant="outline" size="sm" disabled className="cursor-not-allowed opacity-60">
+                    Share <span className="ml-1 text-xs text-muted-foreground">(Coming soon)</span>
+                  </Button>
                   <Button
                     type="button"
                     variant="secondary"

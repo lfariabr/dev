@@ -8,12 +8,14 @@ Done:
 - Update Articles and Projects URL exhibition to match url strucutre instead of random code
 
 In Progress:
-### v2.0.0 🔥 | `feature/mistery-goglins-mode`
+### v2.0.0 🔥 | `feature/goglins-mode`
 > Goal: Activate "Goggins Mode" — a mysterious floating button opens a modal asking for email. After a valid email and clicking "Surprise Me", generate a short, intense, motivational message tailored for builders version 18+ and version 18- (depending on choice, either safe and respectful tone or adult language, profanity or insults; motivate with discipline, ownership, and action.) using the existing OpenAI service.
 
 - [X] backend: tests, api, rate limit, schema, resolver, mutation, zod schema, typeDefs, 
 - [X] frontend: component, layout fine tune, modal, floating button, graphql call, 
-  - [ ] Add avatar to the dialog + hide email + quote visualization + disclaiemr about mode (whatsapp ref)
+  - [X] Add avatar to the dialog + hide email + quote visualization + disclaiemr about mode (whatsapp ref)
+  - [X] persist email and auto hide field from dialog for better UX
+  - [X] persist last generated quote
   - [ ] tests
 
 ### v3.0.0 🔥 | `feature/resend`

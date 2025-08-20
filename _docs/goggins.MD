@@ -1,4 +1,4 @@
-### v2.0.0 🔥 | `feature/mistery-goglins-mode`
+### v2.0.0 🔥 | `feature/goglins-mode`
 > Goal: Activate "Goggins Mode" — a mysterious floating button opens a modal asking for email. After a valid email and clicking "Surprise Me", generate a short, intense, motivational message tailored for builders version 18+ and version 18- (depending on choice, either safe and respectful tone or adult language, profanity or insults; motivate with discipline, ownership, and action.) using the existing OpenAI service.
 
 Here's the plan to accomplish it:
@@ -58,6 +58,10 @@ Here's the plan to accomplish it:
 - [X] make Goggins icon a little bit bigger
 - [X] fix reset time in not appearing when in dark mode
 - [X] rethink how to show rate limit info... a little bit odd
-- [ ] Add avatar to the dialog + hide email + quote visualization + disclaiemr about mode
+- [X] Add avatar to the dialog
+- [X] give the quote a nice visualization 
+- [X] add a disclaimer about the mode
+- [X] persist email and auto hide field from dialog for better UX
+- [X] persist last generated quote
 - [ ] add page test to render and assert that GogginsFab is rendered
 - [ ] add component tests with mocked apollo (happy path returning text and rate-limited path showing countdown)
