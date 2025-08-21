@@ -1,7 +1,10 @@
 // resendMailer.ts
 import { Resend } from 'resend';
+import config from '../config/config';
 
-const resend = new Resend(process.env.RESEND_API_KEY); // add .env
+// Resend expects a string API key in the constructor
+const resendApiKey = config.resendApiKey?.trim();
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 export type SendEmailResult = {
   data: any | null;
@@ -9,6 +12,10 @@ export type SendEmailResult = {
 };
 
 export async function sendGogginsEmail(to: string): Promise<SendEmailResult> {
+  if (!resend) {
+    console.warn('[resendMailer] RESEND_API_KEY not set. Skipping email send.');
+    return { data: null, error: null };
+  }
   try {
     const { data, error } = await resend.emails.send({
       from: 'Goggins <goggins@luisfaria.dev>', // e-mail do domínio verificado
