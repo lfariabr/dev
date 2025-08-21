@@ -44,6 +44,11 @@ Here's the plan to accomplish it:
 - [X] add screamInput Zod schema and guard explicitMode
 - [X] update unit test for rate limit paths (allowed vs blocked) and resetIn correctness
 - [X] integration test for activateGogginsMode with in-memory mongo/redis and mocked openAI  
+- [X] run `npm run test` to verify all tests pass. Results:
+  - Test Suites: 8 passed, 8 total
+  - Tests:       28 passed, 28 total
+  - Snapshots:   0 total
+  - Time:        11.346 s
 
 **Frontend:**
 > Goal: Build frontend dialog modal with graphql Call + apollo mutation to hit activateGogginsMode, show message, handle rate-limit (use resetIn for countdown).
@@ -63,5 +68,12 @@ Here's the plan to accomplish it:
 - [X] add a disclaimer about the mode
 - [X] persist email and auto hide field from dialog for better UX
 - [X] persist last generated quote
-- [ ] add page test to render and assert that GogginsFab is rendered
-- [ ] add component tests with mocked apollo (happy path returning text and rate-limited path showing countdown)
+- [X] add page test to render and assert that GogginsFab is rendered
+- [X] add component tests with mocked apollo (happy path returning text and rate-limited path showing countdown)
+- [X] run `npm run test` to verify all tests pass. Results:
+  - Test Suites: 6 passed, 6 total
+  - Tests:       21 passed, 21 total
+  - Snapshots:   0 total
+  - Time:        3.553 s
+
+---

@@ -16,6 +16,19 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// Polyfill ResizeObserver used by Radix UI
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+if (typeof window.ResizeObserver === 'undefined') {
+  // @ts-ignore
+  window.ResizeObserver = ResizeObserverMock;
+  // @ts-ignore
+  global.ResizeObserver = ResizeObserverMock;
+}
+
 // Mock Next.js router
 jest.mock('next/router', () => ({
   useRouter: () => ({
@@ -39,27 +52,28 @@ jest.mock('next/image', () => {
   return {
     __esModule: true,
     default: function Image(props) {
+      const { loader, loading, placeholder, blurDataURL, fill, ...rest } = props || {};
       // Create img element without JSX
       return React.createElement('img', {
-        ...props,
-        // Remove next/image specific props
-        loader: undefined,
-        loading: undefined,
-        placeholder: undefined,
-        blurDataURL: undefined,
+        ...rest,
       });
     },
   };
 });
 
-// Suppress console errors during tests
+// Suppress console errors during tests (ignore known benign warnings)
 const originalConsoleError = console.error;
 beforeAll(() => {
   console.error = (...args) => {
+    const msg = String(args[0] || '');
     if (
-      /Warning: ReactDOM.render is no longer supported in React 18/.test(args[0]) ||
-      /Warning: useLayoutEffect does nothing on the server/.test(args[0]) ||
-      /`ReactDOMTestUtils.act` is deprecated/.test(args[0])
+      /ReactDOM.render is no longer supported/.test(msg) ||
+      /useLayoutEffect does nothing on the server/.test(msg) ||
+      /`ReactDOMTestUtils.act` is deprecated/.test(msg) ||
+      /Received `true` for a non-boolean attribute `fill`/.test(msg) ||
+      /does not recognize the `blurDataURL` prop/.test(msg) ||
+      /validateDOMNesting/.test(msg) ||
+      /cannot be a descendant of/.test(msg)
     ) {
       return;
     }

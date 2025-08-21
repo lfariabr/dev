@@ -199,15 +199,17 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
       <DialogContent className="w-[96vw] max-w-[420px] h-auto max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Goggins Mode</DialogTitle>
-          <DialogDescription>
-            {/* header row with avatar to relate visually */}
-            <div className="mb-2 flex items-center gap-3">
-              <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-black/10 dark:ring-white/20">
-                <Image src="/goggins.png" alt="Goggins" fill sizes="40px" className="object-cover" />
-              </span>
-              <p className="text-sm text-muted-foreground">
-                Get a short, tough-love nudge to get moving.
-              </p>
+          <DialogDescription asChild>
+            <div>
+              {/* header row with avatar to relate visually */}
+              <div className="mb-2 flex items-center gap-3">
+                <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-1 ring-black/10 dark:ring-white/20">
+                  <Image src="/goggins.png" alt="Goggins" fill sizes="40px" className="object-cover" />
+                </span>
+                <p className="text-sm text-muted-foreground">
+                  Get a short, tough-love nudge to get moving.
+                </p>
+              </div>
             </div>
           </DialogDescription>
         </DialogHeader>
