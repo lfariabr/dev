@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 const siteUrl = 'https://luisfaria.dev'
 
 export const defaultMetadata: Metadata = {
-  title: 'Luis Faria | SeniorSoftware Engineer & Technical Leader',
+  title: 'Luis Faria | Senior Software Engineer & Technical Leader',
   description: 'Expertise in modern web technologies, system architecture, and team leadership. Check out my portfolio and projects.',
   metadataBase: new URL(siteUrl),
   alternates: {
