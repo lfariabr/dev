@@ -1,20 +1,19 @@
 import { GraphQLError } from 'graphql';
 import Scream from '../../models/Scream';
 import { rateLimiter } from '../../services/rateLimiter';
-import { chatWithAI } from '../../services/openai';
+import { chatWithGogginsMode } from '../../services/openai';
+import { sendGogginsEmail } from '../../services/resendMailer';
 
 // Simple email normalization/validation (replace later with zod schema)
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 const isValidEmail = (email: string) => /.+@.+\..+/.test(email);
 
 const buildPrompt = (explicitMode: boolean) => {
-  const base = `You're “Goggins Mode” — a relentless motivator for software engineers. Use tough love, not fluff. Be brutally honest, driven by discipline, ownership, and action. Keep responses sharp, between 100–120 characters or short punchy paragraphs. Always sign off with: — Goggins Mode.`;
-
   if (explicitMode) {
-    return base + ` Don't hold back. Drop raw truths with grit. Use censored language like "fk", "fkn", "mtfkn" to drive it home.`;
+    return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Unleash brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Use profanity (e.g., "f#ck", "f#ck#n", "m*t#f*c#n") for raw intensity. Make it social media shareable. Sign off: — Goggins Mode.`;
   }
 
-  return base + ` Stay intense but clean — no profanity. Focus on power, ownership, and next steps.`;
+  return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Deliver brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Keep it intense, clean, no profanity, social media shareable. Sign off: — Goggins Mode.`;
 };
 
 export const activateGogginsMode = async (_: any, { input }: any) => {
@@ -49,7 +48,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
   // Generate scream via OpenAI
   const modelUsed = 'gpt-3.5-turbo'; // keep aligned with chatWithAI default
   const prompt = buildPrompt(explicitMode);
-  const text = await chatWithAI(prompt, modelUsed);
+  const text = await chatWithGogginsMode(prompt);
 
   // Persist
   const isSubscriber = true; // TODO: replace with Stripe/customer check
@@ -63,6 +62,17 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
     isSubscriber,
     subscriptionType,
   });
+
+  // Fire-and-forget email notification (non-blocking, non-fatal)
+  // void sendGogginsEmail(userEmail, text, { explicitMode })
+  //   .then(({ error }) => {
+  //     if (error) {
+  //       console.error('[screams] sendGogginsEmail error:', error);
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.error('[screams] sendGogginsEmail exception:', err);
+  //   });
 
   const resetIn = Math.max(0, Math.ceil((limitResult.resetTime.getTime() - Date.now()) / 1000));
 

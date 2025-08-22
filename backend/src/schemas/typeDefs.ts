@@ -66,7 +66,7 @@ export const typeDefs = `#graphql
     activateGogginsMode(input: ScreamInput!): Scream!
 
     # Resend
-    sendGogginsEmail(to: String!): Boolean!
+    sendGogginsEmail(to: String!, text: String!, explicitMode: Boolean): Boolean!
   }
 
   type Subscription {

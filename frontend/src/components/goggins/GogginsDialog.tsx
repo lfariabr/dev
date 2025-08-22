@@ -253,10 +253,10 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
               />
             ) : (
               <div className="flex items-center justify-start">
-                <span className="inline-flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
+                {/* <span className="inline-flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   Saved as {form.getValues('userEmail') || 'you@example.com'}
-                </span>
+                </span> */}
               </div>
             )}
 

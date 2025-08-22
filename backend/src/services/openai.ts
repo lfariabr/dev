@@ -10,6 +10,10 @@ const openai = new OpenAI({
 // Cache the stringified profile to avoid repeated JSON.stringify
 let cachedProfile: string | null = null;
 
+const getGogginsModePrompt = (): string => {
+  return `You're Goggins Mode — a ruthless, no-excuses motivator. Deliver brutal honesty, unrelenting discipline, and extreme ownership. Annihilate weakness, demand action, and embrace the grind. Keep responses raw, intense, 120–150 characters or short, soul-shaking paragraphs. Sign off: — Goggins Mode.`;
+}
+
 const getSystemPrompt = (): string => {
   // Return cached version if available
   if (cachedProfile) {
@@ -51,6 +55,33 @@ export const chatWithAI = async (
           {
             role: 'system',
             content: getSystemPrompt(),
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        max_tokens: 500,
+        temperature: 0.7,
+      });
+  
+      return response.choices[0]?.message?.content || 'Sorry, I could not generate a response.';
+    } catch (error: any) {
+      console.error('OpenAI API error:', error.message);
+      throw new Error('Failed to get response from AI service');
+    }
+  };
+
+  export const chatWithGogginsMode = async (
+    prompt: string
+  ): Promise<string> => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: getGogginsModePrompt(),
           },
           {
             role: 'user',

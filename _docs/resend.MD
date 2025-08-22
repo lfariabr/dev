@@ -1,10 +1,13 @@
 ### v3.0.0 🔥 | `feature/resend`
 > Goal: Integrate Resend to send emails to users when they activate Goggins Mode. Prepare terrain to receive emails according to desired settings (Desired Hour, Daily, Weekly, Monthly, etc)
 
-- [x] Study Resend's API
-- [x] Create resend resolver/mutation (`sendGogginsEmail`)
-- [ ] Test sending via API apollo playground
-- [ ] Point domain to IP (DNS A record) and verify domain in Resend
+- [X] Study Resend's API
+- [X] Create resend resolver/mutation (`sendGogginsEmail`)
+- [X] Test sending via API apollo playground
+- [X] Point domain to IP (DNS A record) and verify domain in Resend
+- [X] Wire generated Goggins email to `sendGogginsEmail`
+- [X] Test sending via frontend
+- [X] Set up tests
 - [ ] Prepare schedules (Desired Hour, Daily, Weekly, Monthly)
 
 ---
