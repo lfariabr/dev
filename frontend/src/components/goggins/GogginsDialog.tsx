@@ -220,7 +220,7 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
               <div className="flex items-center justify-between rounded-md border bg-muted/40 px-3 py-2">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-2 text-xs font-medium">
-                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" /> Requests left
+                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" /> Screams count
                   </span>
                   <span className="text-xs text-muted-foreground">{remaining}/{limit}</span>
                   {used != null && limit != null && (
@@ -231,7 +231,7 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
                 </div>
                 {secondsUntilReset != null && secondsUntilReset > 0 && (
                   <span className="text-xs rounded-full bg-amber-100 px-2 py-0.5 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200">
-                    Resets in {formatDuration(secondsUntilReset)}
+                    + in {formatDuration(secondsUntilReset)}
                   </span>
                 )}
               </div>
@@ -253,10 +253,10 @@ export function GogginsDialog({ open, onOpenChange }: GogginsDialogProps) {
               />
             ) : (
               <div className="flex items-center justify-start">
-                {/* <span className="inline-flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-[11px] text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <span className="inline-flex items-center gap-2 rounded-full bg-muted px-2 py-1 text-[10px] text-muted-foreground">
+                  {/* <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> */}
                   Saved as {form.getValues('userEmail') || 'you@example.com'}
-                </span> */}
+                </span>
               </div>
             )}
 

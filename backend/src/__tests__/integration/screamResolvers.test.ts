@@ -4,7 +4,7 @@ import { connectRedis, disconnectRedis, getRedisClient } from '../../services/re
 
 // Mock OpenAI service
 jest.mock('../../services/openai', () => ({
-  chatWithAI: jest.fn().mockResolvedValue('This is a mock AI response'),
+  chatWithGogginsMode: jest.fn().mockResolvedValue('This is a mock AI response'),
 }));
 
 // Define test queries and mutations

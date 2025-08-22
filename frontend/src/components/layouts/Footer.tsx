@@ -13,7 +13,7 @@ export function Footer() {
           <div className="space-y-3">
             <h3 className="text-lg font-medium">Luis Faria</h3>
             <p className="text-sm text-muted-foreground">
-              Full-stack Software Engineer specialized in development with Python, TypeScript, React, Node.js, and modern web technologies.
+              Fullstack Senior Software Engineer specialized in development with Python, TypeScript, React, Node.js, and modern web technologies.
             </p>
           </div>
           

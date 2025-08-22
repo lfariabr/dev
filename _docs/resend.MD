@@ -7,7 +7,9 @@
 - [X] Point domain to IP (DNS A record) and verify domain in Resend
 - [X] Wire generated Goggins email to `sendGogginsEmail`
 - [X] Test sending via frontend
-- [X] Set up tests
+- [X] Revalidate implementation with fresh mind
+- [X] Fine tunes email template and prompts
+- [ ] Set up tests
 - [ ] Prepare schedules (Desired Hour, Daily, Weekly, Monthly)
 
 ---

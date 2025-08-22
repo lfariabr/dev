@@ -10,10 +10,10 @@ const isValidEmail = (email: string) => /.+@.+\..+/.test(email);
 
 const buildPrompt = (explicitMode: boolean) => {
   if (explicitMode) {
-    return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Unleash brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Use profanity (e.g., "f#ck", "f#ck#n", "m*t#f*c#n") for raw intensity. Make it social media shareable. Sign off: — Goggins Mode.`;
+    return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Unleash brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Use profanity (e.g., "f#ck", "f#ck#n", "m*t#f*c#n") for raw intensity.`;
   }
 
-  return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Deliver brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Keep it intense, clean, no profanity, social media shareable. Sign off: — Goggins Mode.`;
+  return `Generate one short motivational scream (150-200 chars or 1-3 sentences). Deliver brutal truths about self-improvement: own your failures, embrace pain, grind relentlessly. Keep it intense, clean, no profanity.`;
 };
 
 export const activateGogginsMode = async (_: any, { input }: any) => {
@@ -30,7 +30,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
 
   // Redis rate limit (2/day)
   const key = `goggins:${userEmail}`;
-  const limitResult = await rateLimiter.limit(key, 2, 86400);
+  const limitResult = await rateLimiter.limit(key, 100, 86400); // 100 for testing
 
   if (!limitResult.success) {
     const resetIn = Math.max(0, Math.ceil((limitResult.resetTime.getTime() - Date.now()) / 1000));
@@ -46,7 +46,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
   }
 
   // Generate scream via OpenAI
-  const modelUsed = 'gpt-3.5-turbo'; // keep aligned with chatWithAI default
+  const modelUsed = 'gpt-3.5-turbo'; // keep aligned with chatWithAI's default
   const prompt = buildPrompt(explicitMode);
   const text = await chatWithGogginsMode(prompt);
 
@@ -64,15 +64,15 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
   });
 
   // Fire-and-forget email notification (non-blocking, non-fatal)
-  // void sendGogginsEmail(userEmail, text, { explicitMode })
-  //   .then(({ error }) => {
-  //     if (error) {
-  //       console.error('[screams] sendGogginsEmail error:', error);
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.error('[screams] sendGogginsEmail exception:', err);
-  //   });
+  void sendGogginsEmail(userEmail, text, { explicitMode })
+    .then(({ error }) => {
+      if (error) {
+        console.error('[screams] sendGogginsEmail error:', error);
+      }
+    })
+    .catch((err) => {
+      console.error('[screams] sendGogginsEmail exception:', err);
+    });
 
   const resetIn = Math.max(0, Math.ceil((limitResult.resetTime.getTime() - Date.now()) / 1000));
 

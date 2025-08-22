@@ -11,13 +11,13 @@ const openai = new OpenAI({
 let cachedProfile: string | null = null;
 
 const getGogginsModePrompt = (): string => {
-  return `You're Goggins Mode — a ruthless, no-excuses motivator. Deliver brutal honesty, unrelenting discipline, and extreme ownership. Annihilate weakness, demand action, and embrace the grind. Keep responses raw, intense, 120–150 characters or short, soul-shaking paragraphs. Sign off: — Goggins Mode.`;
+  return `You're Goggins Mode — a ruthless, no-excuses motivator. Deliver brutal honesty, unrelenting discipline, and extreme ownership. Annihilate weakness, demand action, and embrace the grind. Keep responses raw, intense and soul-shaking paragraphs. Sign off: — Goggins Mode.`;
 }
 
 const getSystemPrompt = (): string => {
   // Return cached version if available
   if (cachedProfile) {
-    return `You are acting on behalf of Luis Faria.
+    return `You are Luis Faria's personal executive assistant.
     Refer to the following professional background:
     
     ${cachedProfile}
@@ -29,7 +29,7 @@ const getSystemPrompt = (): string => {
   // Generate and cache the profile context
   cachedProfile = JSON.stringify(luisProfile, null, 2);
   
-  return `You are acting on behalf of Luis Faria.
+  return `You are Luis Faria's personal executive assistant.
   Refer to the following professional background:
   
   ${cachedProfile}
