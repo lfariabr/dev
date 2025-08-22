@@ -4,14 +4,14 @@
 A modern portfolio application built with Next.js, TypeScript, Node.js, GraphQL and DigitalOcean.
 
 ## Key Features
-Version | Feature | Description
---- | --- | ---
-1.1.0 | `feature/portfolio` | Portfolio showcase with project highlights
-1.2.0 | `feature/articles` | Articles section with categorization
-1.3.0 | `feature/auth` | Secure login area with JWT authentication
-1.4.0 | `feature/chatbot` | AI-powered chatbot (rate-limited to 1 question per hour per user)
-2.0.0 | `feature/myscreams` | MyScreams feature (rate-limited to 2 questions per 24h per user) (***work in progress***)
-3.0.0 | `feature/resend` | Resend integration (***work in progress***)
+| Version | Feature | Milestone | Status
+| --- | --- | --- | ---
+| **v1.1.0** | `feature/portfolio` | Portfolio showcase with project highlights | ✅ Complete |
+| **v1.2.0** | `feature/articles` | Articles section with categorization | ✅ Complete |
+| **v1.3.0** | `feature/auth` | Secure login area with JWT authentication | ✅ Complete |
+| **v1.4.0** | `feature/chatbot` | AI-powered chatbot (rate-limited to 1 question per hour per user) | ✅ Complete |
+| **v2.0.0** | `feature/goggins-mode` | Goggins Mode feature (rate-limited to 2 questions per 24h per user) | ✅ Complete |
+| **v3.0.0** | `feature/resend` | Resend integration | ⚠️ In Progress |
 
 ## Tech Stack
 ### Frontend
@@ -20,6 +20,8 @@ Version | Feature | Description
 - TailwindCSS for styling
 - shadcn/ui for components
 - NextAuth.js for authentication
+- OpenAI for AI chatbot
+- Goggins Mode component
 
 ### Backend
 - Node.js with Express
@@ -28,6 +30,8 @@ Version | Feature | Description
 - Redis for caching and rate limiting
 - MongoDB for data storage
 - JWT for secure authentication
+- OpenAI client
+- Resend for email notifications
 
 ## Project Structure
 ```
