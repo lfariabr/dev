@@ -8,7 +8,7 @@ import {
   ReactNode 
 } from 'react';
 import { useRouter } from 'next/navigation';
-import { gql, useMutation, ApolloError } from '@apollo/client';
+import { gql, useMutation, ApolloError, isApolloError } from '@apollo/client';
 import Cookies from 'js-cookie';
 import { UserRole } from '../graphql/types/user.types';
 
@@ -127,12 +127,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const loadUserFromLocalStorage = () => {
       try {
         // First try to get from cookies (for SSR compatibility)
-        let storedToken = Cookies.get('token');
+        let storedToken: string | undefined = Cookies.get('token');
         let storedUser: string | null = null;
         
         // If not in cookies, fall back to localStorage
         if (!storedToken) {
-          storedToken = localStorage.getItem('token');
+          storedToken = localStorage.getItem('token') ?? undefined;
           storedUser = localStorage.getItem('user');
         } else {
           storedUser = localStorage.getItem('user');
@@ -167,10 +167,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         variables: {
           input: { email, password }
         },
-        errorPolicy: 'all'  // ✅ This is crucial!
+        errorPolicy: 'all'  // 
       });
   
-      // ✅ Check if login was successful
+      // 
       if (data?.login) {
         setUser(data.login.user);
         setToken(data.login.token);
@@ -182,14 +182,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   
         router.push('/');
       } else {
-        // ✅ Login failed, show the first GraphQL error if available
+        // 
         const errorMessage =
           errors?.[0]?.message || 'Login failed. Please try again.';
         setError(errorMessage);
         console.warn('[Login Error]', errorMessage);
       }
     } catch (err) {
-      // ✅ Catch network or unexpected errors
+      // 
       const formatted = formatError(err);
       setError(formatted);
       console.error('[Login Exception]', formatted);
@@ -198,7 +198,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (credentials: { name: string; email: string; password: string }) => {
+    const { name, email, password } = credentials;
     setLoading(true);
     setError(null);
     
@@ -220,16 +221,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
         
         router.push('/');
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Registration error:', err);
       
-      // Extract the error message directly from GraphQL error
-      if (err.graphQLErrors && err.graphQLErrors.length > 0) {
-        setError(err.graphQLErrors[0].message);
-      } else if (err.networkError) {
-        setError(`Network error: ${err.networkError.message}`);
-      } else {
-        setError(err.message || 'An error occurred during registration');
+      // Safely narrow the error type
+      if (err instanceof ApolloError) {
+        if (err.graphQLErrors && err.graphQLErrors.length > 0) {
+          setError(err.graphQLErrors[0].message);
+        } else if (err.networkError) {
+          setError(`Network error: ${err.networkError.message}`);
+        } else {
+          setError(err.message);
+        }
       }
     } finally {
       setLoading(false);

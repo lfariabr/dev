@@ -123,9 +123,13 @@ export default function ChatbotPage() {
       if (error.graphQLErrors?.length > 0) {
         const graphQLError = error.graphQLErrors[0];
         
-        if (graphQLError.extensions?.code === 'RATE_LIMITED' && graphQLError.extensions.resetTime) {
-          resetTimeString = graphQLError.extensions.resetTime;
-          setRateLimitResetTime(new Date(resetTimeString));
+        if (graphQLError.extensions?.code === 'RATE_LIMITED') {
+          const ext = graphQLError.extensions as Record<string, unknown> | undefined;
+          const extReset = ext?.resetTime;
+          if (typeof extReset === 'string') {
+            resetTimeString = extReset;
+            setRateLimitResetTime(new Date(resetTimeString));
+          }
           errorMessage = 'You have reached your 5 messages/hour limit.';
           setRateLimitError(errorMessage);
         }
