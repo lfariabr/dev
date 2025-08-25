@@ -86,7 +86,13 @@ describe('GogginsDialog - rate limit paths', () => {
 
     // Rate limit banner shows remaining/limit and reset pill
     expect(screen.getByText('0/2')).toBeInTheDocument();
-    expect(screen.getByText(/Resets in 02:00/i)).toBeInTheDocument();
+    // Accept either the previous copy ("Resets in 02:00") or the current UI ("+ in 02:00")
+    expect(
+      screen.getByText((_, node) => {
+        const text = (node?.textContent || '').trim();
+        return /^(Resets in\s*02:00|\+\s*in\s*02:00)$/i.test(text);
+      })
+    ).toBeInTheDocument();
 
     // Button shows Wait label and is disabled
     expect(screen.getByRole('button', { name: /wait 02:00/i })).toBeDisabled();

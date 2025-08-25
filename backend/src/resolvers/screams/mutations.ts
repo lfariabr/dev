@@ -30,7 +30,7 @@ export const activateGogginsMode = async (_: any, { input }: any) => {
 
   // Redis rate limit (2/day)
   const key = `goggins:${userEmail}`;
-  const limitResult = await rateLimiter.limit(key, 100, 86400); // 100 for testing
+  const limitResult = await rateLimiter.limit(key, 2, 86400); // 100 for testing
 
   if (!limitResult.success) {
     const resetIn = Math.max(0, Math.ceil((limitResult.resetTime.getTime() - Date.now()) / 1000));
